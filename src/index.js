@@ -1,7 +1,8 @@
 import dotenv from 'dotenv'
 import express from 'express'
+import http from 'http'
 import lnService from 'ln-service'
-import { createInvoice } from './createInvoice'
+import { createWebSocketServer } from './createWebSocketServer.js'
 
 dotenv.config()
 
@@ -15,10 +16,11 @@ const { lnd } = lnService.authenticatedLndGrpc({
 
 const app = express()
 
+const server = http.createServer(app)
+createWebSocketServer(server, lnd)
+
 app.use(express.static('public'))
 
-app.listen(PORT)
-
-if (false) {
-	createInvoice(lnd, 1000, 'Fish food', 15)
-}
+server.listen(PORT, () => {
+	console.log(`Server started on port ${server.address().port}`)
+})

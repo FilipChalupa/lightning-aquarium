@@ -8,6 +8,7 @@ export const createInvoice = async (
 	tokens,
 	description,
 	expiresInMinutes,
+	onPaid,
 ) => {
 	const invoiceExpiresAt = new Date()
 	invoiceExpiresAt.setMinutes(invoiceExpiresAt.getMinutes() + expiresInMinutes)
@@ -22,6 +23,7 @@ export const createInvoice = async (
 	subscription.on('invoice_updated', async (invoice) => {
 		if (invoice.confirmed_at) {
 			console.log("It's paid")
+			onPaid()
 		}
 	})
 	console.log(invoice)
