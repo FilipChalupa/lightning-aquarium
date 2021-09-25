@@ -1,6 +1,25 @@
+*,
+*::before,
+*::after {
+	box-sizing: border-box;
+}
+
 body {
 	font-family: sans-serif;
 	text-align: center;
+	margin: 0;
+	padding: 1em;
+	min-height: 100vh;
+	display: flex;
+	flex-direction: column;
+}
+body::before,
+body::after {
+	content: '';
+	flex-grow: 1;
+}
+body::after {
+	flex-grow: 3;
 }
 
 button {
@@ -12,6 +31,7 @@ button {
 	flex-wrap: wrap;
 	align-items: center;
 	max-width: 1000px;
+	width: 100%;
 	margin: 0 auto;
 	gap: 2em 1em;
 	justify-content: center;
