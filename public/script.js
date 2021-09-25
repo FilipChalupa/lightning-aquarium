@@ -5,14 +5,25 @@ const $invoiceCopy = $invoice.querySelector('.invoice__copy')
 const $fishes = document.querySelectorAll('.fish')
 const fishes = Array.from($fishes).map(($fish) => ({
 	// @TODO: initialize from api
-	size: 0.2 * Math.random(),
+	size: 0.8 * Math.random(),
 	x: Math.random(),
 	y: Math.random(),
 	speed: 0.002 + Math.random() * 0.002,
 	goingUp: Math.random() < 0.5,
 	goingLeft: Math.random() < 0.5,
+	color: Math.random(),
 	$element: $fish,
 }))
+
+fishes.forEach((fish) => {
+	const slowDownRatio = 10
+	fish.$element.addEventListener('mouseenter', () => {
+		fish.speed /= slowDownRatio
+	})
+	fish.$element.addEventListener('mouseleave', () => {
+		fish.speed *= slowDownRatio
+	})
+})
 
 const qrcode = new QRCode($invoiceQr, {
 	text: '',
@@ -53,6 +64,7 @@ const renderFish = (fish) => {
 		'--goingLeft',
 		`${fish.goingLeft ? '1' : '0'}`,
 	)
+	fish.$element.style.setProperty('--color', `${fish.color}`)
 }
 
 const loop = () => {

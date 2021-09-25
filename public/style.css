@@ -115,6 +115,7 @@ button {
 	--x: 0.5;
 	--y: 0.5;
 	--goingLeft: 0;
+	--color: 0;
 
 	--dimension: calc(3% + 10% * var(--size));
 	background-image: url('icons/fish.svg');
@@ -125,6 +126,7 @@ button {
 	left: calc((100% - var(--dimension)) * var(--x));
 	width: var(--dimension);
 	transform: scaleX(calc(-2 * var(--goingLeft) + 1));
+	filter: hue-rotate(calc(var(--color) * 1turn));
 }
 .fish::before {
 	content: '';
