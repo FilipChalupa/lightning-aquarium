@@ -2,9 +2,16 @@
 	"name": "lightning-aquarium",
 	"version": "1.0.0",
 	"description": "",
-	"main": "index.js",
-	"scripts": {},
+	"main": "src/index.js",
+	"type": "module",
+	"scripts": {
+		"start": "node src/index.js"
+	},
 	"keywords": [],
 	"author": "",
-	"license": "ISC"
+	"license": "ISC",
+	"dependencies": {
+		"dotenv": "^10.0.0",
+		"ln-service": "^52.8.0"
+	}
 }
