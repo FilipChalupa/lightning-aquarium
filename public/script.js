@@ -14,6 +14,7 @@ const fishes = Array.from($fishes).map(($fish) => ({
 	color: Math.random(),
 	$element: $fish,
 }))
+let isFeeding = false
 
 fishes.forEach((fish) => {
 	const slowDownRatio = 10
@@ -49,8 +50,13 @@ ws.onmessage = (event) => {
 	const [command, data] = event.data.toString().split(';')
 	if (command === 'fishFoodInvoice') {
 		updateInvoice(data)
+		$invoice.classList.remove('invoice--paid')
 	} else if (command === 'fishFoodPaid') {
 		$invoice.classList.add('invoice--paid')
+		setTimeout(() => {
+			ws.send('createFishFoodInvoice')
+		}, 5000)
+		feed()
 	} else {
 		console.log('Unknown command')
 	}
@@ -67,18 +73,34 @@ const renderFish = (fish) => {
 	fish.$element.style.setProperty('--color', `${fish.color}`)
 }
 
+const feed = (() => {
+	let timer
+	return () => {
+		clearTimeout(timer)
+		isFeeding = true
+		timer = setTimeout(() => {
+			isFeeding = false
+		}, 2000)
+	}
+})()
+
 const loop = () => {
 	fishes.forEach((fish) => {
 		if (
 			(fish.goingUp === true && fish.y === 0) ||
 			(fish.goingUp === false && fish.y === 1) ||
-			Math.random() < fish.speed * 3
+			Math.random() < fish.speed * 3 ||
+			(isFeeding && !fish.goingUp && fish.y > 0.2)
 		) {
 			fish.goingUp = !fish.goingUp
 		}
 		fish.y = Math.max(
 			0,
-			Math.min(1, fish.y + (fish.goingUp ? -1 : 1) * 0.7 * fish.speed),
+			Math.min(
+				1,
+				fish.y +
+					(fish.goingUp ? -1 : 1) * 0.7 * fish.speed * (isFeeding ? 2 : 1),
+			),
 		)
 		if (
 			(fish.goingLeft === true && fish.x === 0) ||
