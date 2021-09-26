@@ -44,7 +44,8 @@ $invoiceCopy.addEventListener('click', () => {
 	navigator.clipboard.writeText($invoiceRawValue.value)
 })
 
-const ws = new WebSocket('ws://localhost:8000/')
+//const ws = new WebSocket('ws://localhost:8000/')
+const ws = new WebSocket('wss://lightning-aquarium.eu.ngrok.io/')
 ws.onopen = () => {
 	ws.send('createFishFoodInvoice')
 }

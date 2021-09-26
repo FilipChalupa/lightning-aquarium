@@ -7,7 +7,8 @@ import { createWebSocketServer } from './createWebSocketServer.js'
 
 dotenv.config()
 
-const { CERT, INVOICE_MACAROON, SOCKET, PORT, NODE_ENV } = process.env
+const { CERT, INVOICE_MACAROON, SOCKET, PORT, NODE_ENV, NGROK_AUTH_TOKEN } =
+	process.env
 const isDevelopment = NODE_ENV === 'development'
 const isProduction = !isDevelopment
 
@@ -28,8 +29,13 @@ server.listen(PORT, async () => {
 	const port = server.address().port
 	console.log(`Server started on port ${port}`)
 
-	if (isProduction) {
-		const publicUrl = await ngrok.connect({ addr: port })
+	if (isProduction && NGROK_AUTH_TOKEN) {
+		const publicUrl = await ngrok.connect({
+			addr: port,
+			authtoken: NGROK_AUTH_TOKEN,
+			region: 'eu',
+			subdomain: 'lightning-aquarium',
+		})
 		console.log(`Server running public at ${publicUrl}`)
 	}
 })
