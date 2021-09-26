@@ -63,6 +63,7 @@ button {
 	opacity: 0;
 }
 .invoice__qr {
+	image-rendering: pixelated;
 	grid-column: 1 / -1;
 }
 .invoice__rawValue {
