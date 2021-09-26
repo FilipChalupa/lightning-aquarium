@@ -82,13 +82,14 @@ button {
 	background-color: #06a004ee;
 }
 .invoice::after {
+	transform: scale(0.5);
 	transition-timing-function: cubic-bezier(0.31, 0.02, 0.87, 1.5);
 }
 .invoice--paid::after {
 	background-image: url('icons/check.svg');
 	background-size: 60%;
 	background-repeat: no-repeat;
-	background-position: center;
+	background-position: center 38%;
 	transform: scale(1);
 }
 .invoice--paid::before,
