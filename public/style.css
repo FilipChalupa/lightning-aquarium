@@ -12,6 +12,7 @@ body {
 	min-height: 100vh;
 	display: flex;
 	flex-direction: column;
+	background-color: #f6fdff;
 }
 body::before,
 body::after {
@@ -39,6 +40,11 @@ button {
 
 .about {
 	width: 100%;
+	line-height: 1.3;
+}
+
+.about p {
+	margin: 0;
 }
 
 .invoice {
@@ -49,7 +55,9 @@ button {
 	column-gap: 0.5em;
 	row-gap: 0.75em;
 	position: relative;
+	background-color: #ffffff;
 	transition: opacity 0.3s;
+	box-shadow: 5px 10px 10px #0000002a;
 }
 .invoice--loading {
 	opacity: 0;
@@ -109,6 +117,7 @@ button {
 	border-top-color: transparent;
 	flex-grow: 1;
 	flex-basis: 600px;
+	box-shadow: 5px 10px 10px #0000002a;
 }
 .aquarium::before {
 	content: '';
@@ -122,14 +131,14 @@ button {
 	left: 0;
 	right: 0;
 	bottom: 0;
-	background-size: 5% 1%;
-	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 70 500 60' preserveAspectRatio='none'%3E%3Crect x='0' y='0' width='500' height='500' style='stroke: none; fill: %237FDBFF;' /%3E%3Cpath d='M0,100 C150,200 350,0 500,100 L500,00 L0,0 Z' style='stroke: none; fill: %23ffffff;'%3E%3C/path%3E%3C/svg%3E");
+	background-size: 5% 1%, cover;
+	background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 70 500 60' preserveAspectRatio='none'%3E%3Crect x='0' y='0' width='500' height='500' style='stroke: none; fill: %237FDBFF;' /%3E%3Cpath d='M0,100 C150,200 350,0 500,100 L500,00 L0,0 Z' style='stroke: none; fill: %23f6fdff;'%3E%3C/path%3E%3C/svg%3E"),
+		linear-gradient(to bottom, #7fdbff, #51b9ff 90%);
 	background-repeat: repeat-x;
-	background-color: #7fdbff;
-	animation: wawes 20s infinite linear;
+	animation: waves 20s infinite linear;
 }
 
-@keyframes wawes {
+@keyframes waves {
 	to {
 		background-position-x: 100%;
 	}
@@ -151,7 +160,8 @@ button {
 	left: calc((100% - var(--dimension)) * var(--x));
 	width: var(--dimension);
 	transform: scaleX(calc(-2 * var(--goingLeft) + 1));
-	filter: hue-rotate(calc(var(--color) * 1turn));
+	filter: drop-shadow(0 3px 4px #4444dd6b)
+		hue-rotate(calc(var(--color) * 1turn));
 }
 .fish::before {
 	content: '';
