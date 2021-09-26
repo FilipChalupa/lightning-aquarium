@@ -23,7 +23,7 @@ const app = express()
 const server = http.createServer(app)
 createWebSocketServer(server, lnd)
 
-app.use(express.static('public'))
+app.use(express.static('docs'))
 
 server.listen(PORT, async () => {
 	const port = server.address().port
