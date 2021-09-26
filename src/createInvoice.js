@@ -26,6 +26,5 @@ export const createInvoice = async (
 			onPaid()
 		}
 	})
-	console.log(invoice)
 	return invoice.request
 }
