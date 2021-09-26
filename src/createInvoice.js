@@ -22,7 +22,7 @@ export const createInvoice = async (
 	const subscription = subscribeToInvoice({ id: invoice.id, lnd })
 	subscription.on('invoice_updated', async (invoice) => {
 		if (invoice.confirmed_at) {
-			console.log("It's paid")
+			console.log(`[${new Date().toLocaleTimeString()}] It's paid`)
 			onPaid()
 		}
 	})
