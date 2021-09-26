@@ -49,17 +49,62 @@ button {
 
 .invoice {
 	border: 1px solid;
-	display: inline-grid;
-	grid-template-columns: 1fr auto;
 	padding: 1em;
-	column-gap: 0.5em;
-	row-gap: 0.75em;
 	position: relative;
 	background-color: #ffffff;
-	transition: opacity 0.3s;
 	box-shadow: 5px 10px 10px #0000002a;
 }
-.invoice--loading {
+.invoice__loading {
+	position: absolute;
+	top: calc(50% - 40px);
+	left: calc(50% - 40px);
+	width: 80px;
+	height: 80px;
+	transition-property: opacity, visibility;
+	transition-duration: 0.3s;
+	opacity: 0.75;
+}
+.invoice:not(.invoice--loading) .invoice__loading {
+	opacity: 0;
+	visibility: hidden;
+}
+.invoice__loading div {
+	display: block;
+	position: absolute;
+	width: 64px;
+	height: 64px;
+	margin: 8px;
+	border: 8px solid currentColor;
+	border-radius: 50%;
+	animation: invoice__loading 1.2s cubic-bezier(0.5, 0, 0.5, 1) infinite;
+	border-color: currentColor transparent transparent transparent;
+}
+.invoice__loading div:nth-child(1) {
+	animation-delay: -0.45s;
+}
+.invoice__loading div:nth-child(2) {
+	animation-delay: -0.3s;
+}
+.invoice__loading div:nth-child(3) {
+	animation-delay: -0.15s;
+}
+@keyframes invoice__loading {
+	0% {
+		transform: rotate(0deg);
+	}
+	100% {
+		transform: rotate(360deg);
+	}
+}
+
+.invoice__loadedContent {
+	display: grid;
+	grid-template-columns: 1fr auto;
+	column-gap: 0.5em;
+	row-gap: 0.75em;
+	transition: opacity 0.3s;
+}
+.invoice--loading .invoice__loadedContent {
 	opacity: 0;
 }
 .invoice__qr {
