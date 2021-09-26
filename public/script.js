@@ -2,6 +2,7 @@ const $invoice = document.querySelector('.invoice')
 const $invoiceQr = $invoice.querySelector('.invoice__qr')
 const $invoiceRawValue = $invoice.querySelector('.invoice__rawValue')
 const $invoiceCopy = $invoice.querySelector('.invoice__copy')
+const $aquarium = document.querySelector('.aquarium')
 const $fishes = document.querySelectorAll('.fish')
 const fishes = Array.from($fishes).map(($fish) => ({
 	// @TODO: initialize from api
@@ -78,6 +79,17 @@ const feed = (() => {
 	return () => {
 		clearTimeout(timer)
 		isFeeding = true
+
+		$aquarium.querySelectorAll('.food').forEach(($food) => $food.remove())
+		const count = Math.floor(10 + Math.random() * 10)
+		for (let i = 0; i < count; i++) {
+			const $food = document.createElement('div')
+			$food.classList.add('food')
+			$food.style.setProperty('--x', Math.random())
+			$food.style.setProperty('--size', Math.random())
+			$aquarium.appendChild($food)
+		}
+
 		timer = setTimeout(() => {
 			isFeeding = false
 		}, 2000)
@@ -105,7 +117,8 @@ const loop = () => {
 		if (
 			(fish.goingLeft === true && fish.x === 0) ||
 			(fish.goingLeft === false && fish.x === 1) ||
-			Math.random() < fish.speed * 1.2
+			Math.random() < fish.speed * 1.2 ||
+			(isFeeding && fish.goingLeft && fish.x < 0.5)
 		) {
 			fish.goingLeft = !fish.goingLeft
 		}

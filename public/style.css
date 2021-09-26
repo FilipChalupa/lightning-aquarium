@@ -141,7 +141,7 @@ button {
 	background-image: url('icons/fish.svg');
 	background-size: cover;
 	position: absolute;
-	z-index: 1;
+	z-index: 2;
 	top: calc((100% - var(--dimension) * var(--aquarium-aspectRatio)) * var(--y));
 	left: calc((100% - var(--dimension)) * var(--x));
 	width: var(--dimension);
@@ -152,6 +152,43 @@ button {
 	content: '';
 	display: block;
 	padding-top: 100%;
+}
+
+@property --food-y {
+	syntax: '<number>';
+	inherits: true;
+	initial-value: 0;
+}
+
+.food {
+	--x: 0.5;
+	--size: 0.1;
+
+	--food-y: 0;
+	--dimension: calc(0.3% + 0.4% * var(--size));
+	position: absolute;
+	z-index: 1;
+	top: calc(30% * var(--food-y) * (0.3 + 0.7 * var(--size)));
+	left: calc(55% + 30% * var(--x));
+	border-radius: 50%;
+	width: var(--dimension);
+	background-color: #77480a;
+	animation: fall calc(2s + 1s * var(--size)) forwards linear;
+}
+.food::before {
+	content: '';
+	display: block;
+	padding-top: 100%;
+}
+
+@keyframes fall {
+	80% {
+		opacity: 1;
+	}
+	100% {
+		--food-y: 1;
+		opacity: 0;
+	}
 }
 
 .footer {
