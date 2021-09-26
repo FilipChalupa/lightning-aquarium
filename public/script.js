@@ -36,6 +36,7 @@ const qrcode = new QRCode($invoiceQr, {
 
 const updateInvoice = (request) => {
 	qrcode.makeCode(request)
+	$invoice.classList.remove('invoice--loading')
 	$invoiceRawValue.value = request
 }
 

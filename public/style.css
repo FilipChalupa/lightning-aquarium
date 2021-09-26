@@ -49,6 +49,10 @@ button {
 	column-gap: 0.5em;
 	row-gap: 0.75em;
 	position: relative;
+	transition: opacity 0.3s;
+}
+.invoice--loading {
+	opacity: 0;
 }
 .invoice__qr {
 	grid-column: 1 / -1;
