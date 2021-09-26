@@ -256,6 +256,7 @@ button {
 	order: 1; /* Last */
 	font-size: 0.75em;
 	color: #3b3b3b;
+	margin-top: 2em;
 }
 .footer a {
 	color: inherit;
