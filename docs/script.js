@@ -8,6 +8,11 @@ const firebaseConfig = {
 }
 const db = firebase.initializeApp(firebaseConfig).firestore()
 
+const isDevelopment = false // @TODO
+const isProduction = !isDevelopment
+
+const prefixCollectionName = (name) => `${isDevelopment ? 'dev-' : ''}${name}`
+
 const $invoice = document.querySelector('.invoice')
 const $invoiceQr = $invoice.querySelector('.invoice__qr')
 const $invoiceRawValue = $invoice.querySelector('.invoice__rawValue')
@@ -55,11 +60,13 @@ $invoiceCopy.addEventListener('click', () => {
 })
 
 const createFishFoodInvoice = async () => {
-	const invoice = await db.collection('invoiceRequests').add({
-		type: 'fishFood',
-	})
+	const invoice = await db
+		.collection(prefixCollectionName('invoiceRequests'))
+		.add({
+			type: 'fishFood',
+		})
 	const unsubscribe = db
-		.collection('invoices')
+		.collection(prefixCollectionName('invoices'))
 		.doc(invoice.id)
 		.onSnapshot((doc) => {
 			const data = doc.data()

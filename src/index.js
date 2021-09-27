@@ -26,8 +26,10 @@ admin.initializeApp({
 	credential: admin.credential.cert(serviceAccount),
 })
 
+const prefixCollectionName = (name) => `${isDevelopment ? 'dev-' : ''}${name}`
+
 const db = admin.firestore()
-db.collection('invoiceRequests')
+db.collection(prefixCollectionName('invoiceRequests'))
 	.limit(1)
 	.onSnapshot((querySnapshot) => {
 		querySnapshot.forEach(async (doc) => {
@@ -36,7 +38,9 @@ db.collection('invoiceRequests')
 			doc.ref.delete()
 			if (type === 'fishFood') {
 				log('Fish food invoice requested')
-				const invoiceRef = db.collection('invoices').doc(id)
+				const invoiceRef = db
+					.collection(prefixCollectionName('invoices'))
+					.doc(id)
 
 				const request = await createInvoice(
 					lnd,
