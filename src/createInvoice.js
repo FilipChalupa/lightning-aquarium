@@ -19,11 +19,9 @@ export const createInvoice = async (
 		tokens,
 	})
 
-	console.log(`[${new Date().toLocaleTimeString()}] Created invoice`)
 	const subscription = subscribeToInvoice({ id: invoice.id, lnd })
 	subscription.on('invoice_updated', async (invoice) => {
 		if (invoice.confirmed_at) {
-			console.log(`[${new Date().toLocaleTimeString()}] It's paid`)
 			onPaid()
 		}
 	})

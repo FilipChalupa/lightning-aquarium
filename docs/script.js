@@ -1,3 +1,13 @@
+const firebaseConfig = {
+	apiKey: 'AIzaSyD517PrpONqTLTrrLttapV73-N8vXu0iXs',
+	authDomain: 'lightning-ab682.firebaseapp.com',
+	projectId: 'lightning-ab682',
+	storageBucket: 'lightning-ab682.appspot.com',
+	messagingSenderId: '175391913296',
+	appId: '1:175391913296:web:19ddc5e9a39d3e63d42855',
+}
+const db = firebase.initializeApp(firebaseConfig).firestore()
+
 const $invoice = document.querySelector('.invoice')
 const $invoiceQr = $invoice.querySelector('.invoice__qr')
 const $invoiceRawValue = $invoice.querySelector('.invoice__rawValue')
@@ -44,26 +54,32 @@ $invoiceCopy.addEventListener('click', () => {
 	navigator.clipboard.writeText($invoiceRawValue.value)
 })
 
-//const ws = new WebSocket('ws://localhost:8000/')
-const ws = new WebSocket('wss://lightning-aquarium.eu.ngrok.io/')
-ws.onopen = () => {
-	ws.send('createFishFoodInvoice')
+const createFishFoodInvoice = async () => {
+	const invoice = await db.collection('invoiceRequests').add({
+		type: 'fishFood',
+	})
+	const unsubscribe = db
+		.collection('invoices')
+		.doc(invoice.id)
+		.onSnapshot((doc) => {
+			const data = doc.data()
+			if (!data) {
+				return
+			}
+			if (data.paidAt) {
+				unsubscribe()
+				$invoice.classList.add('invoice--paid')
+				setTimeout(() => {
+					createFishFoodInvoice()
+				}, 5000)
+				feed()
+			} else if (data.request) {
+				updateInvoice(data.request)
+				$invoice.classList.remove('invoice--paid')
+			}
+		})
 }
-ws.onmessage = (event) => {
-	const [command, data] = event.data.toString().split(';')
-	if (command === 'fishFoodInvoice') {
-		updateInvoice(data)
-		$invoice.classList.remove('invoice--paid')
-	} else if (command === 'fishFoodPaid') {
-		$invoice.classList.add('invoice--paid')
-		setTimeout(() => {
-			ws.send('createFishFoodInvoice')
-		}, 5000)
-		feed()
-	} else {
-		console.log('Unknown command')
-	}
-}
+createFishFoodInvoice()
 
 const renderFish = (fish) => {
 	fish.$element.style.setProperty('--size', `${fish.size}`)
