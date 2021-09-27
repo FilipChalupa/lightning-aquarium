@@ -29,39 +29,39 @@ admin.initializeApp({
 const prefixCollectionName = (name) => `${isDevelopment ? 'dev-' : ''}${name}`
 
 const db = admin.firestore()
-db.collection(prefixCollectionName('invoiceRequests'))
-	.limit(1)
-	.onSnapshot((querySnapshot) => {
-		querySnapshot.forEach(async (doc) => {
-			const { type } = doc.data()
-			const { id } = doc
-			doc.ref.delete()
-			if (type === 'fishFood') {
-				log('Fish food invoice requested')
-				const invoiceRef = db
-					.collection(prefixCollectionName('invoices'))
-					.doc(id)
+const invoiceRequestsCollection = db.collection(
+	prefixCollectionName('invoiceRequests'),
+)
+// @TODO remove stale requests
+invoiceRequestsCollection.limit(1).onSnapshot((querySnapshot) => {
+	querySnapshot.forEach(async (doc) => {
+		const { type } = doc.data()
+		const { id } = doc
+		doc.ref.delete()
+		if (type === 'fishFood') {
+			log('Fish food invoice requested')
+			const invoiceRef = db.collection(prefixCollectionName('invoices')).doc(id)
 
-				const request = await createInvoice(
-					lnd,
-					1000,
-					isProduction ? 'Fish food' : 'Food fish test',
-					15,
-					() => {
-						log('🐟🎉 Fish food invoice paid')
-						invoiceRef.update({
-							paidAt: admin.firestore.FieldValue.serverTimestamp(),
-						})
-					},
-				)
+			const request = await createInvoice(
+				lnd,
+				1000,
+				isProduction ? 'Fish food' : 'Food fish test',
+				15,
+				() => {
+					log('🐟🎉 Fish food invoice paid')
+					invoiceRef.update({
+						paidAt: admin.firestore.FieldValue.serverTimestamp(),
+					})
+				},
+			)
 
-				await invoiceRef.create({
-					request,
-					type,
-					createdAt: admin.firestore.FieldValue.serverTimestamp(),
-				})
-			} else {
-				log(`Unknown invoice request type "${type}"`)
-			}
-		})
+			await invoiceRef.create({
+				request,
+				type,
+				createdAt: admin.firestore.FieldValue.serverTimestamp(),
+			})
+		} else {
+			log(`Unknown invoice request type "${type}"`)
+		}
 	})
+})
