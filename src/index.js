@@ -60,8 +60,7 @@ invoiceRequestsCollection.limit(1).onSnapshot((querySnapshot) => {
 				type,
 				createdAt: admin.firestore.FieldValue.serverTimestamp(),
 			})
-		}
-		if (type === 'lnurl') {
+		} else if (type === 'lnurl') {
 			log('LNURL invoice requested')
 			const invoiceRef = db.collection(prefixCollectionName('invoices')).doc(id)
 
