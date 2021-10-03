@@ -35,7 +35,7 @@ const invoiceRequestsCollection = db.collection(
 // @TODO remove stale requests
 invoiceRequestsCollection.limit(1).onSnapshot((querySnapshot) => {
 	querySnapshot.forEach(async (doc) => {
-		const { type } = doc.data()
+		const { type, ...data } = doc.data()
 		const { id } = doc
 		doc.ref.delete()
 		if (type === 'fishFood') {
@@ -45,10 +45,33 @@ invoiceRequestsCollection.limit(1).onSnapshot((querySnapshot) => {
 			const request = await createInvoice(
 				lnd,
 				1000,
-				isProduction ? 'Fish food' : 'Food fish test',
+				isProduction ? 'Fish food' : 'Fish food test',
 				15,
 				() => {
 					log('🐟🎉 Fish food invoice paid')
+					invoiceRef.update({
+						paidAt: admin.firestore.FieldValue.serverTimestamp(),
+					})
+				},
+			)
+
+			await invoiceRef.create({
+				request,
+				type,
+				createdAt: admin.firestore.FieldValue.serverTimestamp(),
+			})
+		}
+		if (type === 'lnurl') {
+			log('LNURL invoice requested')
+			const invoiceRef = db.collection(prefixCollectionName('invoices')).doc(id)
+
+			const request = await createInvoice(
+				lnd,
+				data.amount,
+				isProduction ? 'LNURL' : 'LNURL test',
+				15,
+				() => {
+					log('⚡🎉 LNURL invoice paid')
 					invoiceRef.update({
 						paidAt: admin.firestore.FieldValue.serverTimestamp(),
 					})
