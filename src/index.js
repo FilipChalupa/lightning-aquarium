@@ -66,7 +66,7 @@ invoiceRequestsCollection.limit(1).onSnapshot((querySnapshot) => {
 
 			const request = await createInvoice(
 				lnd,
-				data.amount,
+				data.amount / 1000,
 				isProduction ? 'LNURL' : 'LNURL test',
 				15,
 				() => {
