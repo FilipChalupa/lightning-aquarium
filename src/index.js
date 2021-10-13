@@ -45,7 +45,6 @@ invoiceRequestsCollection.limit(1).onSnapshot((querySnapshot) => {
 			const request = await createInvoice(
 				lnd,
 				1000,
-				isProduction ? 'Fish food' : 'Fish food test',
 				15,
 				() => {
 					log('🐟🎉 Fish food invoice paid')
@@ -53,6 +52,7 @@ invoiceRequestsCollection.limit(1).onSnapshot((querySnapshot) => {
 						paidAt: admin.firestore.FieldValue.serverTimestamp(),
 					})
 				},
+				isProduction ? 'Fish food' : 'Fish food test',
 			)
 
 			await invoiceRef.create({
@@ -67,7 +67,6 @@ invoiceRequestsCollection.limit(1).onSnapshot((querySnapshot) => {
 			const request = await createInvoice(
 				lnd,
 				data.amount / 1000,
-				isProduction ? 'LNURL' : 'LNURL test',
 				15,
 				() => {
 					log('⚡🎉 LNURL invoice paid')
@@ -75,6 +74,8 @@ invoiceRequestsCollection.limit(1).onSnapshot((querySnapshot) => {
 						paidAt: admin.firestore.FieldValue.serverTimestamp(),
 					})
 				},
+				'[["text/identifier","ln@filipchalupa.cz"],["text/plain","Pay to ln@filipchalupa.cz"]]',
+				true,
 			)
 
 			await invoiceRef.create({

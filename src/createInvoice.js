@@ -1,3 +1,4 @@
+import crypto from 'crypto'
 import {
 	createInvoice as createInvoiceLn,
 	subscribeToInvoice,
@@ -6,17 +7,21 @@ import {
 export const createInvoice = async (
 	lnd,
 	tokens,
-	description,
 	expiresInMinutes,
 	onPaid,
+	description,
+	hashDescription = false,
 ) => {
 	const invoiceExpiresAt = new Date()
 	invoiceExpiresAt.setMinutes(invoiceExpiresAt.getMinutes() + expiresInMinutes)
 	const invoice = await createInvoiceLn({
 		lnd,
-		description,
+		description: hashDescription ? undefined : description,
 		expires_at: invoiceExpiresAt.toISOString(),
 		tokens,
+		description_hash: hashDescription
+			? crypto.createHash('sha256').update(description).digest('hex')
+			: undefined,
 	})
 
 	const subscription = subscribeToInvoice({ id: invoice.id, lnd })
