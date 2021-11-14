@@ -88,10 +88,3 @@ invoiceRequestsCollection.limit(1).onSnapshot((querySnapshot) => {
 		}
 	})
 })
-
-const keepAliveLoop = async () => {
-	log('Keep alive')
-	await lnService.getIdentity({ lnd })
-	setTimeout(keepAliveLoop, 30 * 60 * 1000 /* 30 minutes */)
-}
-keepAliveLoop()
