@@ -38,10 +38,9 @@ invoiceRequestsCollection.limit(1).onSnapshot((querySnapshot) => {
 		const { id } = doc
 		doc.ref.delete()
 		let request = null
+		const invoiceRef = db.collection(prefixCollectionName('invoices')).doc(id)
 		if (type === 'fishFood') {
 			log('Fish food invoice requested')
-			const invoiceRef = db.collection(prefixCollectionName('invoices')).doc(id)
-
 			request = await createInvoice(
 				lnd,
 				1000,
@@ -56,8 +55,6 @@ invoiceRequestsCollection.limit(1).onSnapshot((querySnapshot) => {
 			)
 		} else if (type === 'lnurl') {
 			log('LNURL invoice requested')
-			const invoiceRef = db.collection(prefixCollectionName('invoices')).doc(id)
-
 			request = await createInvoice(
 				lnd,
 				data.amount / 1000,
