@@ -16,12 +16,6 @@ const { CERT, INVOICE_MACAROON, SOCKET, NODE_ENV } = process.env
 const isDevelopment = NODE_ENV === 'development'
 const isProduction = !isDevelopment
 
-const { lnd } = lnService.authenticatedLndGrpc({
-	cert: CERT,
-	macaroon: INVOICE_MACAROON,
-	socket: SOCKET,
-})
-
 admin.initializeApp({
 	credential: admin.credential.cert(serviceAccount),
 })
@@ -34,6 +28,11 @@ const invoiceRequestsCollection = db.collection(
 )
 // @TODO remove stale requests
 invoiceRequestsCollection.limit(1).onSnapshot((querySnapshot) => {
+	const { lnd } = lnService.authenticatedLndGrpc({
+		cert: CERT,
+		macaroon: INVOICE_MACAROON,
+		socket: SOCKET,
+	})
 	querySnapshot.forEach(async (doc) => {
 		const { type, ...data } = doc.data()
 		const { id } = doc
