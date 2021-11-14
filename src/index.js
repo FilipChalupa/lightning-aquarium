@@ -37,11 +37,12 @@ invoiceRequestsCollection.limit(1).onSnapshot((querySnapshot) => {
 		const { type, ...data } = doc.data()
 		const { id } = doc
 		doc.ref.delete()
+		let request = null
 		if (type === 'fishFood') {
 			log('Fish food invoice requested')
 			const invoiceRef = db.collection(prefixCollectionName('invoices')).doc(id)
 
-			const request = await createInvoice(
+			request = await createInvoice(
 				lnd,
 				1000,
 				15,
@@ -53,17 +54,11 @@ invoiceRequestsCollection.limit(1).onSnapshot((querySnapshot) => {
 				},
 				isProduction ? 'Fish food' : 'Fish food test',
 			)
-
-			await invoiceRef.create({
-				request,
-				type,
-				createdAt: admin.firestore.FieldValue.serverTimestamp(),
-			})
 		} else if (type === 'lnurl') {
 			log('LNURL invoice requested')
 			const invoiceRef = db.collection(prefixCollectionName('invoices')).doc(id)
 
-			const request = await createInvoice(
+			request = await createInvoice(
 				lnd,
 				data.amount / 1000,
 				15,
@@ -76,14 +71,15 @@ invoiceRequestsCollection.limit(1).onSnapshot((querySnapshot) => {
 				'[["text/identifier","ln@filipchalupa.cz"],["text/plain","Pay to ln@filipchalupa.cz"]]',
 				true,
 			)
-
+		} else {
+			log(`Unknown invoice request type "${type}"`)
+		}
+		if (request) {
 			await invoiceRef.create({
 				request,
 				type,
 				createdAt: admin.firestore.FieldValue.serverTimestamp(),
 			})
-		} else {
-			log(`Unknown invoice request type "${type}"`)
 		}
 	})
 })
