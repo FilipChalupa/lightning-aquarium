@@ -43,7 +43,7 @@ invoiceRequestsCollection.limit(1).onSnapshot((querySnapshot) => {
 			log('Fish food invoice requested')
 			request = await createInvoice(
 				lnd,
-				1000,
+				100,
 				15,
 				() => {
 					log('🐟🎉 Fish food invoice paid')
