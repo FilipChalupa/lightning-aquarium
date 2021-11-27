@@ -26,6 +26,9 @@ const db = admin.firestore()
 const invoiceRequestsCollection = db.collection(
 	prefixCollectionName('invoiceRequests'),
 )
+
+log('Starting server')
+
 // @TODO remove stale requests
 invoiceRequestsCollection.limit(1).onSnapshot((querySnapshot) => {
 	const { lnd } = lnService.authenticatedLndGrpc({
