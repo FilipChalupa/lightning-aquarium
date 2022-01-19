@@ -110,6 +110,10 @@ button {
 .invoice__qr {
 	image-rendering: pixelated;
 	grid-column: 1 / -1;
+	display: flex;
+	aspect-ratio: 1 / 1;
+	width: 100%;
+	max-width: 250px;
 }
 .invoice__rawValue {
 	border: none;
