@@ -254,9 +254,31 @@ button {
 
 .footer {
 	order: 1; /* Last */
-	font-size: 0.75em;
 	color: #3b3b3b;
 	margin-top: 2em;
+}
+.footer__callToAction,
+.footer__address {
+	font-size: 0.9em;
+	margin: 0.5em 0;
+}
+.footer__address {
+	display: flex;
+	flex-direction: column;
+}
+.footer__addressInput {
+	border: none;
+	background: transparent;
+	color: inherit;
+	font-size: inherit;
+	text-overflow: ellipsis;
+	overflow: hidden;
+	width: 100%;
+	text-align: center;
+}
+.footer__links {
+	margin-top: 2em;
+	font-size: 0.75em;
 }
 .footer a {
 	color: inherit;
