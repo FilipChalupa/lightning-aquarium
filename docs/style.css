@@ -206,6 +206,16 @@ button {
 	background-repeat: repeat-x;
 }
 
+.aquarium__coral {
+	position: absolute;
+	inset: 30% 0 0;
+	z-index: 1;
+	background-image: url('./coral.png');
+	background-size: cover;
+	background-position: center top;
+	opacity: 0.3;
+}
+
 @keyframes waves {
 	to {
 		background-position-x: 100%;
