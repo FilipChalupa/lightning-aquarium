@@ -63,6 +63,7 @@ button {
 	position: relative;
 	background-color: #ffffff;
 	color: #000000;
+	color-scheme: light;
 	box-shadow: 5px 10px 10px #0000002a;
 }
 .invoice__loading {
